@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+ 	xmlns:h="http://xmlns.jcp.org/jsf/html"
+ 	xmlns:f="http://xmlns.jcp.org/jsf/core"
+ 	xmlns:p="http://primefaces.org/ui"
+ 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+ 	template="WEB-INF/template/Layout.xhtml">
+ 	
+<ui:define name="title">
+	<h2 class="center">ToDo List</h2>
+</ui:define>
+
+<ui:define name="content">
+	<f:metadata>
+		<f:viewAction action="#{toDoManagerBean.allToDos()}" />
+		<f:viewAction action="#{toDoManagerBean.createToDo()}" />
+	</f:metadata>
+	
+	<h:form id="toDoForm" class="center">
+		<p:inputText id="newToDo" size="40" maxlenght="80" value="#{toDoManagerBean.toDo.name}"/>
+		<div>
+			<p:commandButton id="createButton" value="Criar ToDo" style="margin-top:20px;" 
+			actionListener="#{toDoManagerBean.save()}">
+				<f:resetValues render="toDoForm:newToDo"/>
+			</p:commandButton>
+		</div>
+	</h:form>
+	<p:dataTable id="toDoDataTable" value="#{toDoManagerBean.toDoList}" var="todo"
+	emptyMessage="Nenhuma informacao a ser exibida">
+		<p:column headerText="Name">
+			<h:outputText class="center" value="#{todo.name}"/>
+		</p:column>
+		
+		<p:column headerText="Completed">
+			<h:outputText value="#{todo.completed}"/>
+		</p:column>
+		
+		<p:column headerText="Status">
+			<p:selectBooleanButton value="#{todo.name}" offLabel="Incomplete" onLabel="Complete">
+				<p:ajax update="toDoForm"/>
+			</p:selectBooleanButton>
+		</p:column>
+	</p:dataTable>
+</ui:define>
+
+</ui:composition>
+ 
